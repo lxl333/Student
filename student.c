@@ -20,6 +20,7 @@ struct student /*define struct of students' grade*/
 };
 
 struct student stu[50];/*define struct array*/
+
 void in();/*input students'grade's informations*/
 void show();/*show students'informations*/
 void order();/*paixu*/
