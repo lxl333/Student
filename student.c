@@ -1,3 +1,11 @@
+/*
+ * student.c
+ *
+ *  Created on: 2015Âπ¥2Êúà28Êó•
+ *      Author: zengshunyao
+ */
+
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<conio.h>
@@ -8,6 +16,8 @@
 #define FORMAT "%-8d%-15s%-12.11f%-12.11f%-12,11f%-12.11f\n"
 #define DATA stu[i].num,stu[i].name,stu[i].elec,stu[i].expe,stu[i].requ,stu[i].sum
 #define file "data.txt"
+
+//#define OUTPUT_STR(str) do{printf(str);fflush(stdout);}while(0)
 
 struct student /*define struct of students' grade*/
 {
@@ -24,7 +34,7 @@ struct student stu[50];/*define struct array*/
 void in();/*input students'grade's informations*/
 void show();/*show students'informations*/
 void order();/*paixu*/
-void del();/*delete students'grade'sinformations*/
+void del();/*delete students'grade's informations*/
 void modify();/*modify record*/
 void menu();/*menu*/
 void insert();/*insert record*/
@@ -33,6 +43,8 @@ void search();/*search record */
 
 int main()/*main function*/
 {
+	//Ëß£ÂÜ≥Èùûvc6.0ÁéØÂ¢É‰∏ãÁöÑËæìÂá∫ÈóÆÈ¢ò
+	setvbuf(stdout,NULL,_IONBF,0);
 	int n;
 	menu();
 	scanf("%d", &n);/*input fun's num*/
@@ -76,7 +88,8 @@ void in()/*input record*/
 {
 	int i, m = 0;/*m is record the num*/
 	char ch[2];
-	FILE *fp;/*define the file pointer*/
+	FILE *fp=NULL;/*define the file pointer*/
+
 	if ((fp = fopen(file, "a+")) == NULL)/*open the file*/
 	{
 		printf("can not open.\n");
@@ -86,6 +99,7 @@ void in()/*input record*/
 		if (fread(&stu[m], LEN, 1, fp) == 1)
 			m++;/* records'sum*/
 	}
+
 	fclose(fp);
 	if (m == 0)
 		printf("NO record!\n");
@@ -93,6 +107,7 @@ void in()/*input record*/
 		system("cls");
 		show();/*use function show,show the old record*/
 	}
+
 	if ((fp = fopen(file, "wb")) == NULL) {
 		printf("can not open\n");
 		return;
@@ -115,12 +130,13 @@ void in()/*input record*/
 		printf("name:");
 		scanf("%s", stu[m].name);/*input student's name*/
 		printf("elective:");
-		scanf("%lf", stu[m].elec);/*input student's elective subject*/
+		scanf("%lf", &stu[m].elec);/*input student's elective subject*/
 		printf("experiment:");
-		scanf("%lf", stu[m].expe);/*input student's experiment */
+		scanf("%lf", &stu[m].expe);/*input student's experiment */
 		printf("required course:");
-		scanf("%lf", stu[m].requ);/*input student's required course*/
+		scanf("%lf", &stu[m].requ);/*input student's required course*/
 		stu[m].sum = stu[m].elec + stu[m].expe + stu[m].requ;/*compute the sum*/
+
 		if (fwrite(&stu[m], LEN, 1, fp) != 1)/*put the new record into the file*/
 		{
 			printf("can not save!");
@@ -132,6 +148,7 @@ void in()/*input record*/
 		printf("continue ?(Y/N)");/*if continue*/
 		scanf("%s", ch);
 	}
+
 	fclose(fp);
 	printf("OK!\n");
 }
@@ -147,7 +164,7 @@ void show() {
 	fclose(fp);
 	printf("number  name        elective     experiment  required   sum\t\n");
 	for (i = 0; i < m; i++) {
-		printf(FORMAT, DATA);/*Ω´–≈œ¢∞¥÷∏∂®∏Ò Ω¥Ú”°*/
+		printf(FORMAT, DATA);/*Â∞Ü‰ø°ÊÅØÊåâÊåáÂÆöÊ†ºÂºèÊâìÂç∞*/
 	}
 }
 
@@ -170,9 +187,9 @@ void menu()/*define function  achieve the menu's function*/
 	printf("\t\t\tchoose(0-8):");
 }
 
-void order()/*≈≈–Ú∫Ø ˝*/
+void order()/*ÊéíÂ∫èÂáΩÊï∞*/
 {
-	FILE *fp;
+	FILE *fp=NULL;
 	struct student t;
 	int i = 0, j = 0, m = 0;
 	if ((fp = fopen(file, "r+")) == NULL) {
@@ -192,7 +209,7 @@ void order()/*≈≈–Ú∫Ø ˝*/
 		return;
 	}
 	for (i = 0; i < m - 1; i++)
-		for (j = i + i; j < m; j++)/*≥…º®À≥–ÚΩªªª*/
+		for (j = i + i; j < m; j++)/*ÊàêÁª©È°∫Â∫è‰∫§Êç¢*/
 			if (stu[i].sum < stu[j].sum) {
 				t = stu[i];
 				stu[i] = stu[j];
@@ -202,7 +219,7 @@ void order()/*≈≈–Ú∫Ø ˝*/
 		printf("can not open\n");
 		return;
 	}
-	for (i = 0; i < m; i++)/* ‰»Î÷ÿ≈≈ƒ⁄»›*/
+	for (i = 0; i < m; i++)/*ËæìÂÖ•ÈáçÊéíÂÜÖÂÆπ*/
 		if (fwrite(&stu[i], LEN, 1, fp) != 1) {
 			printf("%s can not save !\n");
 			getch();
@@ -213,7 +230,7 @@ void order()/*≈≈–Ú∫Ø ˝*/
 
 void del()/*delete function*/
 {
-	FILE *fp;
+	FILE *fp=NULL;
 	int snum, i, j, m = 0;
 	char ch[2];
 	if ((fp = fopen(file, "r+")) == NULL) {
@@ -239,7 +256,7 @@ void del()/*delete function*/
 	if (strcmp(ch, "Y") == 0 || strcmp(ch, "y") == 0)/*if go to delete*/
 		for (j = i; j < m; j++)
 			stu[j] = stu[j + 1];/*transform  records*/
-	m--;/*record ◊‘ºı*/
+	m--;/*record Ëá™Âáè*/
 	if ((fp = fopen(file, "wb")) == NULL) {
 		printf("can not open \n");
 		return;
@@ -255,7 +272,7 @@ void del()/*delete function*/
 
 void search()/*search function*/
 {
-	FILE *fp;
+	FILE *fp=NULL;
 	int snum, i, m = 0;
 	char ch[2];
 	if ((fp = fopen(file, "rb")) == NULL) {
@@ -289,7 +306,7 @@ void search()/*search function*/
 }
 
 void modify() {
-	FILE *fp;
+	FILE *fp=NULL;
 	int i, j, m = 0, snum;
 	if ((fp = fopen(file, "r+")) == NULL) {
 		printf("can not open\n");
@@ -335,7 +352,7 @@ void modify() {
 }
 
 void insert() {
-	FILE *fp;
+	FILE *fp=NULL;
 	int i, j, k, m = 0, snum;
 	if ((fp = fopen(file, "r+")) == NULL) {
 		printf("can not open\n");
@@ -344,6 +361,7 @@ void insert() {
 	while (!feof(fp))
 		if (fread(&stu[m], LEN, 1, fp) == 1)
 			m++;
+
 	if (m == 0) {
 		printf("no record!\n");
 		fclose(fp);
@@ -393,7 +411,7 @@ void insert() {
 }
 
 void total() {
-	FILE *fp;
+	FILE *fp=NULL;
 	int m = 0;
 	if ((fp = fopen(file, "r+")) == NULL) {
 		printf("can nnot open\n");
@@ -411,3 +429,6 @@ void total() {
 	printf("the class are %d students!\n", m);
 	fclose(fp);
 }
+
+
+
